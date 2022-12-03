@@ -1,0 +1,16 @@
+﻿@model IEnumerable<Cumulative_Project_Najib_Osman.Models.Student>
+@{
+    ViewBag.Title = "List";
+}
+<div id="containerlist">
+    <h2>List Of Students</h2>
+    <form action="/Student/List" method="GET">
+        <input type="text" name="SearchKey" />
+        <input type="submit" value="Search" />
+    </form>
+        @foreach (var student in Model)
+        {
+
+            <div><a href="/Student/Show/@student.StudentId">@student.StudentFname @student.StudentLname</a></div>
+        }
+</div>

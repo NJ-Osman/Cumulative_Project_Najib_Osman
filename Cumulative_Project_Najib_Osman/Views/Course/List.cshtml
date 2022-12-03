@@ -1,0 +1,20 @@
+﻿@model IEnumerable<Cumulative_Project_Najib_Osman.Models.Course>
+@{
+    ViewBag.Title = "List";
+}
+
+<div id="containerlist">
+    <h2>List of Courses</h2>
+    <form action="/Course/List" method="GET">
+        <input type="text" name="SearchKey" />
+        <input type="submit" value="Search" />
+    </form>
+
+    @foreach (var course in Model)
+    {
+        <div class="listitem row">
+            <div class="col-md-12"><a href="/Course/Show/@course.CourseId">@course.CourseName</a></div>
+        </div>
+    }
+</div>
+
