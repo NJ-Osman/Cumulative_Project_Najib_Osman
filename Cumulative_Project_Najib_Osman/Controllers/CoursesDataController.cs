@@ -11,13 +11,24 @@ namespace Cumulative_Project_Najib_Osman.Controllers
 {
     public class CoursesDataController : ApiController
     {
-        private TeacherDbContext SchoolDb = new TeacherDbContext();
+        private TeacherDbContext Schooldb = new TeacherDbContext();
+
+        //This Controller Will access the Courses table of our School database.
+        /// <summary>
+        /// Returns a list of Courses in the system
+        /// Returns course start date and finish date if user clicks on the course name
+        /// </summary>
+        /// <example>GET api/CourseData/ListCourses</example>
+        /// <returns>
+        /// A list of Courses (Course Names)
+        /// List of course name, course startdate and finish date
+        /// </returns>
 
         [HttpGet]
         [Route("api/CoursesData/ListCourses/{SearchKey?}")]
         public IEnumerable<Course> ListCourses(string SearchKey = null)
         {
-            MySqlConnection Conn = SchoolDb.AccessDatabase();
+            MySqlConnection Conn = Schooldb.AccessDatabase();
 
             Conn.Open();
 
@@ -31,7 +42,7 @@ namespace Cumulative_Project_Najib_Osman.Controllers
 
             MySqlDataReader ResultSet = cmd.ExecuteReader();
 
-            List<Course> Courses = new List<Course>{};
+            List<Course> Courses = new List<Course> { };
 
             while (ResultSet.Read())
             {
@@ -53,12 +64,19 @@ namespace Cumulative_Project_Najib_Osman.Controllers
             return Courses;
         }
 
+        /// <summary>
+        /// show url link needs the Course id to obtain all the information about the Courses
+        /// </summary>
+        /// <param name="id"></param>
+        /// <example>GET /Course/Show/3</example>
+        /// <returns> A list of all the information about the Course</returns>
+        /// <returns>A list of startdate, finishdate, and coursename</returns>
         [HttpGet]
         public Course FindCourse(int id)
         {
             Course newCourse = new Course();
 
-            MySqlConnection Conn = SchoolDb.AccessDatabase();
+            MySqlConnection Conn = Schooldb.AccessDatabase();
 
             Conn.Open();
 
@@ -85,6 +103,58 @@ namespace Cumulative_Project_Najib_Osman.Controllers
 
             return newCourse;
 
+        }
+
+        /// <summary>
+        /// The ability to delete a Course from the Course database
+        /// </summary>
+        /// <param name="id"></param>
+        /// <example>GET:Course/DeleteConfirm </example>
+        /// <example>POST : /api/CourseData/DeleteCourse/3</example>
+        public void DeleteCourse(int id)
+        {
+            MySqlConnection Conn = Schooldb.AccessDatabase();
+
+            Conn.Open();
+
+            MySqlCommand cmd = Conn.CreateCommand();
+
+            //SQL QUERY
+            cmd.CommandText = "Delete from Classes where classid=@id";
+            cmd.Parameters.AddWithValue("@id", id);
+            cmd.Prepare();
+
+            cmd.ExecuteNonQuery();
+
+            Conn.Close();
+
+        }
+
+        /// <summary>
+        /// The ability to add a Course to the database
+        /// Returns the new Course startdate, finishdate, and coursename
+        /// </summary>
+        /// <param name="newCourse"></param>
+        /// <example>GET: /Course/New</example>
+        [HttpPost]
+        public void AddCourse([FromBody] Course newCourse)
+        {
+            MySqlConnection Conn = Schooldb.AccessDatabase();
+
+            Conn.Open();
+
+            MySqlCommand cmd = Conn.CreateCommand();
+
+            //SQL QUERY
+            cmd.CommandText = "insert into Classes (startdate, finishdate, classname) values (@StartDate,@FinishDate,@CourseName)";
+            cmd.Parameters.AddWithValue("@StartDate", newCourse.StartDate);
+            cmd.Parameters.AddWithValue("@FinishDate", newCourse.FinishDate);
+            cmd.Parameters.AddWithValue("@CourseName", newCourse.CourseName);
+            cmd.Prepare();
+
+            cmd.ExecuteNonQuery();
+
+            Conn.Close();
         }
 
     }

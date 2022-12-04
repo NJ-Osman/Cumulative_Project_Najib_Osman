@@ -12,13 +12,24 @@ namespace Cumulative_Project_Najib_Osman.Controllers
 {
     public class StudentDataController : ApiController
     {
-        private TeacherDbContext SchoolDb = new TeacherDbContext();
+        private TeacherDbContext Schooldb = new TeacherDbContext();
+
+        //This Controller Will access the Students table of our School database.
+        /// <summary>
+        /// Returns a list of Students in the system
+        /// Returns a list of Students name and their enrol date if the user clicks on the student name
+        /// </summary>
+        /// <example>GET api/StudentData/ListStudents</example>
+        /// <returns>
+        /// A list of Students (first names, last names, student numbers)
+        /// A list of the student name, and student enrol date
+        /// </returns>
 
         [HttpGet]
         [Route("api/StudentData/ListStudents/{SearchKey?}")]
         public IEnumerable<Student> ListStudents(string SearchKey = null)
         {
-            MySqlConnection Conn = SchoolDb.AccessDatabase();
+            MySqlConnection Conn = Schooldb.AccessDatabase();
 
             Conn.Open();
 
@@ -53,6 +64,14 @@ namespace Cumulative_Project_Najib_Osman.Controllers
             Conn.Close();
 
             return Students;
+
+            /// <summary>
+            /// show url link needs the Student id to obtain all the information about the Students
+            /// </summary>
+            /// <param name="id"></param>
+            /// <example>GET /Student/Show/3</example>
+            /// <returns> A list of all the information about the Stundet</returns>
+            /// <returns>A list of firstname, lastname, and enroldate</returns>
         }
 
         [HttpGet]
@@ -60,7 +79,7 @@ namespace Cumulative_Project_Najib_Osman.Controllers
         {
             Student newStudent = new Student();
 
-            MySqlConnection Conn = SchoolDb.AccessDatabase();
+            MySqlConnection Conn = Schooldb.AccessDatabase();
 
             Conn.Open();
 
@@ -86,6 +105,59 @@ namespace Cumulative_Project_Najib_Osman.Controllers
 
 
             return newStudent;
+        }
+
+        /// <summary>
+        /// The ability to delete a Student from the Student database
+        /// </summary>
+        /// <param name="id"></param>
+        /// <example>GET:Student/DeleteConfirm </example>
+        /// <example>POST : /api/StudentData/DeleteStudent/3</example>
+
+        [HttpPost]
+        public void DeleteStudent(int id)
+        {
+            MySqlConnection Conn = Schooldb.AccessDatabase();
+
+            Conn.Open();
+
+            MySqlCommand cmd = Conn.CreateCommand();
+
+            //SQL QUERY
+            cmd.CommandText = "Delete from Students where studentid=@id";
+            cmd.Parameters.AddWithValue("@id", id);
+            cmd.Prepare();
+
+            cmd.ExecuteNonQuery();
+
+            Conn.Close();
+        }
+
+        /// <summary>
+        /// The ability to add a Student to the database
+        /// Returns the new teacher firstname, lastname, and their enroldate onto the database
+        /// </summary>
+        /// <param name="NewStudent"></param>
+        /// <example>GET: /Student/New</example>
+        [HttpPost]
+        public void AddStudent([FromBody] Student NewStudent)
+        {
+            MySqlConnection Conn = Schooldb.AccessDatabase();
+
+            Conn.Open();
+
+            MySqlCommand cmd = Conn.CreateCommand();
+
+            //SQL QUERY
+            cmd.CommandText = "insert into Students (studentfname, studentlname, enroldate) values (@StudentFname,@StudentLname,@StudentEnrolDate)";
+            cmd.Parameters.AddWithValue("@StudentFname", NewStudent.StudentFname);
+            cmd.Parameters.AddWithValue("@StudentLname", NewStudent.StudentLname);
+            cmd.Parameters.AddWithValue("@StudentEnrolDate", NewStudent.StudentEnrolDate);
+            cmd.Prepare();
+
+            cmd.ExecuteNonQuery();
+
+            Conn.Close();
         }
 
     }

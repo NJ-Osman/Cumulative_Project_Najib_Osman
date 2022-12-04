@@ -12,5 +12,10 @@ namespace Cumulative_Project_Najib_Osman.Models
         public DateTime TeacherHireDate;
         public string TeacherFname;
         public string TeacherLname;
+
+
+    //parameter-less constructor function
+    public Teacher() { }
     }
+
 }

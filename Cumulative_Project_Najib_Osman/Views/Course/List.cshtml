@@ -4,6 +4,9 @@
 }
 
 <div id="containerlist">
+     <nav>
+        <a class="navlink" href="/Course/Show/@Model.CourseId">Cancel</a>
+    </nav>
     <h2>List of Courses</h2>
     <form action="/Course/List" method="GET">
         <input type="text" name="SearchKey" />
