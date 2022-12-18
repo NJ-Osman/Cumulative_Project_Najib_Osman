@@ -1,0 +1,29 @@
+﻿@model Cumulative_Project_Najib_Osman.Models.Course
+@{
+    ViewBag.Title = "Update";
+}
+
+<div id="containershow">
+    <nav>
+        <a class="navlink" href="/Course/Show/@Model.CourseId">Back</a>
+    </nav>
+    <h2>Update Course</h2>
+    <form method="POST" action="/Course/Update/@Model.CourseId">
+        <div>
+            <label for="StartDate">Start Date:</label>
+            <input type="text" id="StartDate" name="StartDate" value="@Model.StartDate" />
+        </div>
+        <div>
+            <label for="FinishDate">Finish Date:</label>
+            <input type="text" id="FinishDate" name="FinishDate" value="@Model.FinishDate" />
+        </div>
+
+        <div>
+            <label for="CourseName">Course Name:</label>
+            <textarea id="CourseName" name="CourseName" value="@Model.CourseName"></textarea>
+        </div>
+        <div>
+            <input type="submit" value="Update Course" />
+        </div>
+    </form>
+</div>

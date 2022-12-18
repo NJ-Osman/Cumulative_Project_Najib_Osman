@@ -1,0 +1,33 @@
+﻿@model Cumulative_Project_Najib_Osman.Models.Teacher
+@{
+    ViewBag.Title = "Update";
+}
+
+<div id="containershow">
+    <nav>
+        <a class="navlink" href="/Teacher/Show/@Model.TeacherId">Back</a>
+    </nav>
+    <h2>Update Teacher</h2>
+    <form method="POST" action="/Teacher/Update/@Model.TeacherId">
+    <div>
+        <label for="TeacherFname">First Name:</label>
+        <input type="text" id="TeacherFname" name="TeacherFname" value="@Model.TeacherFname"/>
+    </div>
+    <div>
+        <label for="TeacherLname">Last Name:</label>
+        <input type="text" id="TeacherLname" name="TeacherLname" value="@Model.TeacherLname"/>
+    </div>
+
+    <div>
+        <label for="TeacherSalary">Salary</label>
+        <textarea id="TeacherSalary" name="TeacherSalary" value="@Model.TeacherSalary"></textarea>
+    </div>
+    <div>
+        <label for="SalaryHireDate">HireDate:</label>
+        <textarea id="TeacherHireDate" name="TeacherHireDate" value="@Model.TeacherHireDate"></textarea>
+    </div>
+    <div>
+        <input type="submit" value="Update Teacher" />
+    </div>
+    </form>
+</div>

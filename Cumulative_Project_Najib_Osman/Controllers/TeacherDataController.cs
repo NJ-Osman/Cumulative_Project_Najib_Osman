@@ -2,6 +2,7 @@
 using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -27,7 +28,7 @@ namespace Cumulative_Project_Najib_Osman.Controllers
 
         [HttpGet]
         [Route("api/TeacherData/ListTeachers/{SearchKey?}")]
-        public IEnumerable<Teacher> ListTeachers(string SearchKey=null)
+        public IEnumerable<Teacher> ListTeachers(string SearchKey = null)
         {
             MySqlConnection Conn = Schooldb.AccessDatabase();
 
@@ -43,7 +44,7 @@ namespace Cumulative_Project_Najib_Osman.Controllers
 
             MySqlDataReader ResultSet = cmd.ExecuteReader();
 
-            List<Teacher> Teachers = new List<Teacher>{};
+            List<Teacher> Teachers = new List<Teacher> { };
 
             while (ResultSet.Read())
             {
@@ -132,16 +133,16 @@ namespace Cumulative_Project_Najib_Osman.Controllers
             cmd.ExecuteNonQuery();
 
             Conn.Close();
-            }
+        }
 
-            /// <summary>
-            /// The ability to add a teacher to the database
-            /// Returns the new teacher name salary, and hiredate onto the database
-            /// </summary>
-            /// <param name="NewTeacher"></param>
-            /// <example>GET: /Teacher/New</example>
+        /// <summary>
+        /// The ability to add a teacher to the database
+        /// Returns the new teacher name salary, and hiredate onto the database
+        /// </summary>
+        /// <param name="NewTeacher"></param>
+        /// <example>GET: /Teacher/New</example>
         [HttpPost]
-        public void AddTeacher([FromBody]Teacher NewTeacher)
+        public void AddTeacher([FromBody] Teacher NewTeacher)
         {
             MySqlConnection Conn = Schooldb.AccessDatabase();
 
@@ -160,6 +161,39 @@ namespace Cumulative_Project_Najib_Osman.Controllers
             cmd.ExecuteNonQuery();
 
             Conn.Close();
+        }
+
+        /// <summary>
+        /// Updates an Teacher in the system
+        /// <param name="TeacherId">The id of the teacher in the system</param>
+        /// <param name="UpdatedTeacher">post content, teacher body including name, salary, and hiredate</param>
+        /// </summary>
+        /// <example>
+        /// api/teacherdata/updateteacher/509
+        ///  POST CONTENT/ FORM BODY / REQUEST BODY
+        ///  {teacherfirstname:"", teacherlname: "", teachersalary: "", teacherhiredate: ""}
+        /// </example>
+        
+        public void UpdateTeacher(int id, [FromBody]Teacher TeacherInfo)
+        {
+            MySqlConnection Conn = Schooldb.AccessDatabase();
+
+            Conn.Open();
+
+            MySqlCommand cmd = Conn.CreateCommand();
+
+            //SQL QUERY
+            cmd.CommandText = "update Teachers set teacherfname=@TeacherFname, teacherlname=@TeacherLname, salary=@TeacherSalary, hiredate=@TeacherHireDate where teacherid=@TeacherId";
+            cmd.Parameters.AddWithValue("@TeacherFname", TeacherInfo.TeacherFname);
+            cmd.Parameters.AddWithValue("@TeacherLname", TeacherInfo.TeacherLname);
+            cmd.Parameters.AddWithValue("@TeacherSalary", TeacherInfo.TeacherSalary);
+            cmd.Parameters.AddWithValue("@TeacherHireDate", TeacherInfo.TeacherHireDate);
+            cmd.Parameters.AddWithValue("@TeacherId", id);
+            cmd.Prepare();
+
+            cmd.ExecuteNonQuery();
+
+            Conn.Close(); 
         }
 
         }

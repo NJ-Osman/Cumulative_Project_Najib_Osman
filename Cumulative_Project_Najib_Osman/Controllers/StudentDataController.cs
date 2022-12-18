@@ -160,5 +160,37 @@ namespace Cumulative_Project_Najib_Osman.Controllers
             Conn.Close();
         }
 
+        /// <summary>
+        /// Updates an Student in the system
+        /// <param name="StudentId">The id of the student in the system</param>
+        /// <param name="UpdatedStudent">post content, student body including name and enrol date</param>
+        /// </summary>
+        /// <example>
+        /// api/studentdata/updatestudent/509
+        ///  POST CONTENT/ FORM BODY / REQUEST BODY
+        ///  {studentfirstname:"", studentlastname: "", studentenroldate: ""}
+        /// </example>
+
+        public void UpdateStudent(int id, [FromBody] Student StudentInfo)
+        {
+            MySqlConnection Conn = Schooldb.AccessDatabase();
+
+            Conn.Open();
+
+            MySqlCommand cmd = Conn.CreateCommand();
+
+            //SQL QUERY
+            cmd.CommandText = "update Student set studentfname=@StudentFname, studentlname=@StudentLname, enroldate=@StudentEnrolDate where studentid=@StudentId";
+            cmd.Parameters.AddWithValue("@StudentFname", StudentInfo.StudentFname);
+            cmd.Parameters.AddWithValue("@StudentLname", StudentInfo.StudentLname);
+            cmd.Parameters.AddWithValue("@StudentEnrolDate", StudentInfo.StudentEnrolDate);
+            cmd.Parameters.AddWithValue("@StudentId", id);
+            cmd.Prepare();
+
+            cmd.ExecuteNonQuery();
+
+            Conn.Close();
+        }
+
     }
 }

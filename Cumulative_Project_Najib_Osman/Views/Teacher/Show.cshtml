@@ -7,8 +7,9 @@
     <nav>
         <a class="navlink" href="/Teacher/list">Back to Teachers</a>
         <a class="dellink" href="/Teacher/DeleteConfirm/@Model.TeacherId">Delete</a>
+        <a class="navlink" href="/Teacher/Update/@Model.TeacherId">Update</a>
     </nav>
 <h2>@Model.TeacherFname @Model.TeacherLname</h2>
 <p> @Model.TeacherSalary</p>
-<p>@Model.TeacherHireDate</p>
+<p>@Model.TeacherHireDate.ToString("dd-MMM-yyyy")</p>
 </div>

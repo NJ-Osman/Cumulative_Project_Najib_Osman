@@ -157,5 +157,37 @@ namespace Cumulative_Project_Najib_Osman.Controllers
             Conn.Close();
         }
 
+        /// <summary>
+        /// Updates an Course in the system
+        /// <param name="CourseId">The id of the course in the system</param>
+        /// <param name="UpdatedCourse">post content, course body including start date, finish date, and course name</param>
+        /// </summary>
+        /// <example>
+        /// api/coursedata/updatecourse/509
+        ///  POST CONTENT/ FORM BODY / REQUEST BODY
+        ///  {startdate:"", finishdate: "", coursename: ""}
+        /// </example>
+
+        public void UpdateCourse(int id, [FromBody] Course CourseInfo)
+        {
+            MySqlConnection Conn = Schooldb.AccessDatabase();
+
+            Conn.Open();
+
+            MySqlCommand cmd = Conn.CreateCommand();
+
+            //SQL QUERY
+            cmd.CommandText = "update Course set startdate=@StartDate, finishdate=@FinishDate, coursename=@CourseName where courseid=@CourseId";
+            cmd.Parameters.AddWithValue("@StartDate", CourseInfo.StartDate);
+            cmd.Parameters.AddWithValue("@FinishDate", CourseInfo.FinishDate);
+            cmd.Parameters.AddWithValue("@CourseName", CourseInfo.CourseName);
+            cmd.Parameters.AddWithValue("@CourseId", id);
+            cmd.Prepare();
+
+            cmd.ExecuteNonQuery();
+
+            Conn.Close();
+        }
+
     }
 }
